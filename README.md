@@ -6,6 +6,21 @@ Meu objetivo principal quando criei esse projeto era entender melhor o gerenciam
 análises léxicas e o funcionamento de um compilador. Nesse 
 projeto é possível encontrar um Analisador Léxico, Analisador Sintático e uma Máquina Virtual.
 
+# Instalação
+
+Necessário CMake 3.17 +
+
+```
+
+~/$ git clone https://github.com/Lucas-S-T/LittleLanguage
+~/$ cd LittleLanguage
+~/LittleLanguage$ cmake .
+~/LittleLanguage$ cmake --build .
+~/LittleLanguage$ cmake --install .
+
+
+~/LittleLanguage$ LittleLanguage hello_world.ll
+```
 
 # Tabela de instruções
 
