@@ -30,6 +30,8 @@ typedef struct TOKEN_STRUCT{
         ID,
         CHAR_SEQ,
         DOT,
+        NUMERIC_INT,
+        NUMERIC_FLOAT
 
     }type;
 

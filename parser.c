@@ -96,7 +96,7 @@ void parser_get_args_or_die(parser_T *p, instruction_T *i){
             parser_verify_expected_or_die(p, ID);
             i->carg0 = p->ct->content;
             parser_advance(p);
-            parser_verify_expected_or_die(p, ID);
+            parser_verify_expected_or_die(p, NUMERIC_INT);
             long n = parser_get_as_integer_or_die(p);
             if(n <=0){
                 printf("Invalid or negative number in Allocate instruction.");

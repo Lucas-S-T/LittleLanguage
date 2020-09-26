@@ -4,6 +4,7 @@
 
 #include <stdlib.h>
 #include <stdio.h>
+#include <memory.h>
 #include "ll.h"
 
 
@@ -85,6 +86,55 @@ void lexer_get_until_chars(lexer_T *l, token_t *t, char *c, int sz){
 
 }
 
+void lexer_parse_number_or_ignore(token_t *t){
+
+    int dot = 0;
+    int valid = 1;
+
+    static char n[10] = "1234567890";
+
+    for(int i = 0; i<strlen(t->content); i++){
+
+        char c = t->content[i];
+
+        if(c == '.'){
+            if(dot){
+                valid = 0;
+                break;
+            }
+            dot = 1;
+            continue;
+        }
+
+        int con = 0;
+        for(int j = 0; j<10; j++){
+
+            if(c == n[j]){
+                valid = 1;
+                con = 1;
+            }
+
+        }
+        if(con){
+            continue;
+        }
+        valid = 0;
+
+    }
+
+
+    if(valid && dot){
+        t->type = NUMERIC_FLOAT;
+        return;
+    }
+
+    if(valid){
+        t->type = NUMERIC_INT;
+    }
+
+
+}
+
 
 token_t *lexer_next_token(lexer_T *l){
 
@@ -153,6 +203,7 @@ token_t *lexer_next_token(lexer_T *l){
             t->type = ID;
             char cf[4] = " \n;\0";
             lexer_get_until_chars(l, t, cf, 4);
+            lexer_parse_number_or_ignore(t);
             break;
 
 
