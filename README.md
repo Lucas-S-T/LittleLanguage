@@ -14,6 +14,8 @@ tal sistema é aquele que pode simular uma máquina de Turing universal.
 
 Necessário CMake 3.17 +
 
+Testado apenas em um ambiente Arch Linux.
+
 ```
 
 ~/$ git clone https://github.com/Lucas-S-T/LittleLanguage
@@ -39,6 +41,32 @@ a Máquina Virtual é equipada com 1024 diferentes ponteiros de memória, ou sej
 1024 variáveis ao mesmo tempo, porém, não há limites de quantos bytes pode ser alocado em um único
 ponteiro (Claro, o limite é sua quantidade de RAM).
 
+### Conjunto de Instruções
+
+Sempre que uma função é declarada, automaticamente, um novo conjunto de instruções é criado dentro
+da Máquina Virtual. Assim como a memória, o conjunto de instruções também tem um limite de 1024 
+conjuntos diferentes. Ou seja você poderá declarar apenas 1023 funções diferentes(1024-1 contando com
+o conjunto principal de instruções).
+
+### Pilha(Stack)
+
+Atualmente a Máquina Virtual contém dois tipos diferentes de pilha, e todas elas tem um tamanho máximo de 1024
+valores.
+
+**Instruction Set Stack**: Essa pilha é responsável por salvar o conjunto de instruções que está sendo executado no
+momento, quando você chama uma nova função, o conjunto de instruções atual é salvo na pilha e o conjunto
+principal é alterado para a função anteriormente chamada. Dado o limite da pilha, a quantidade máxima de
+profundidade de uma função é 1024 chamadas.
+
+**Program Counter Stack**: Sempre que o conjunto de instruções é alterado, é necessário salvar o valor
+atual do contador de programa para ser possível continuar a ordem de execução do conjunto  
+anterior após o retorno de uma função.
+
+**Contador de Programa**: O Contador de Programa sempre irá iniciar em 0, sendo ele, a primeira instrução do
+conjunto principal de instruções. Sempre que você chama uma função, o Contador de Programa voltará a zero,
+apontado para a primeira instrução da função chamada. Tenha isso em mente quando utilizar pulos relativos,
+não é possível pular para fora da função, para sair dela, você deve obrigatoriamente utilizar a
+instrução RET.
 
 # Tabela de instruções
 
