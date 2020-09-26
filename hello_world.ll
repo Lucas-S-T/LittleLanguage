@@ -9,4 +9,4 @@
            .OUTS   A                   ; Imprime o conteúdo de A na tela
            .FREE   A                   ; Limpa a memória de A
 
-.RET                                   ; Declara o final da função HW e retorna para posição anterior da stack de programa +1 (Próxima instrução depois da .CALL)
+.RET                                   ; Declara o final da função HW e retorna para posição anterior da stack de programa
