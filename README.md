@@ -62,7 +62,9 @@ profundidade de uma função é 1024 chamadas.
 atual do contador de programa para ser possível continuar a ordem de execução do conjunto  
 anterior após o retorno de uma função.
 
-**Contador de Programa**: O Contador de Programa sempre irá iniciar em 0, sendo ele, a primeira instrução do
+### Contador de Programa 
+
+O Contador de Programa sempre irá iniciar em 0, sendo ele, a primeira instrução do
 conjunto principal de instruções. Sempre que você chama uma função, o Contador de Programa voltará a zero,
 apontado para a primeira instrução da função chamada. Tenha isso em mente quando utilizar pulos relativos,
 não é possível pular para fora da função, para sair dela, você deve obrigatoriamente utilizar a
