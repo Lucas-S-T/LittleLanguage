@@ -37,16 +37,24 @@ int parser_verify_expected_or_die(parser_T *p, int type){
 
 }
 
-long parser_get_as_integer_or_die(parser_T *p){
+long parser_get_as_integer(parser_T *p){
 
-    long num = strtoll(p->ct->content, NULL, 10);
-    if (num == LLONG_MAX){
+    long num = strtol(p->ct->content, NULL, 10);
+    if (num == LONG_MAX){
 
         printf("Expected integer number in: %s\n", p->ct->content);
         exit(0);
 
     }
 
+
+    return num;
+
+}
+
+float parser_get_as_float(parser_T *p){
+
+    float num = strtof(p->ct->content, NULL);
 
     return num;
 
@@ -97,7 +105,7 @@ void parser_get_args_or_die(parser_T *p, instruction_T *i){
             i->carg0 = p->ct->content;
             parser_advance(p);
             parser_verify_expected_or_die(p, NUMERIC_INT);
-            long n = parser_get_as_integer_or_die(p);
+            long n = parser_get_as_integer(p);
             if(n <=0){
                 printf("Invalid or negative number in Allocate instruction.");
                 exit(0);
@@ -154,8 +162,8 @@ void parser_get_args_or_die(parser_T *p, instruction_T *i){
             parser_verify_expected_or_die(p, ID);
             i->carg0 = p->ct->content;
             parser_advance(p);
-            parser_verify_expected_or_die(p, ID);
-            long nl = parser_get_as_integer_or_die(p);
+            parser_verify_expected_or_die(p, NUMERIC_INT);
+            long nl = parser_get_as_integer(p);
             i->larg0 = nl;
             parser_advance(p);
             break;

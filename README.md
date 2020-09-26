@@ -75,7 +75,7 @@ Use o caracter .(ponto) antes de cada instrução.
 
 ## Analisador Léxico
 
-- [ ]  Identificar números decimais e inteiros (Atualmente no Analisador Sintático).
+- [x]  Identificar números decimais e inteiros (Atualmente no Analisador Sintático).
 
 ## Analisador Sintático
 
