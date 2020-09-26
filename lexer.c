@@ -92,6 +92,7 @@ void lexer_parse_number_or_ignore(token_t *t){
     int dot = 0;
     int valid = 1;
 
+
     static char n[10] = "1234567890";
 
     for(int i = 0; i<strlen(t->content); i++){
@@ -113,13 +114,16 @@ void lexer_parse_number_or_ignore(token_t *t){
             if(c == n[j]){
                 valid = 1;
                 con = 1;
+                break;
             }
 
         }
         if(con){
             continue;
         }
+
         valid = 0;
+        break;
 
     }
 
