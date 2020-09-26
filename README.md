@@ -62,6 +62,11 @@ profundidade de uma função é 1024 chamadas.
 atual do contador de programa para ser possível continuar a ordem de execução do conjunto  
 anterior após o retorno de uma função.
 
+**General Stack**: Essa é a única Stack que você pode manipular através dos comandos PUSH e POP, ao dar
+PUSH em uma variável o conteúdo dela é copiado para Stack, seu conteúdo não é perdido, ao dar POP a uma
+outra variável ela é automaticamente alocada com a mesmo tamanho da Stack, em seguida, ela recebe o conteúdo
+previamente colocado na pilha.
+
 ### Contador de Programa 
 
 O Contador de Programa sempre irá iniciar em 0, sendo ele, a primeira instrução do
@@ -86,6 +91,8 @@ Use o caracter .(ponto) antes de cada instrução.
 |Function | FUN | (1) ID | FUN HW: | Declara uma função com o nome HW|
 |Return | RET | (0) | RET | Retorna a função|
 |Call Function | CALL | (1) ID | CALL HW | Chama a função HW|
+|Push Stack | PUSH | (1) ID | PUSH HW | Salva o conteúdo de HW na Stack|
+|Pop Stack | POP | (1) ID | POP HW | Aloca e salva o conteúdo da Stack em HW|
 
 
 
@@ -94,18 +101,22 @@ Use o caracter .(ponto) antes de cada instrução.
 ```
 ; Exemplo de Hello World em Little Language
 
-.CALL   HW                             ; Chama a função HW salvando a posição atual na stack de programa
+.FUN print_stack:           ; Declara a função print_stack
 
-.FUN    HW:                            ; Declara o inicio da função HW
+    .POP    hw              ; Puxa o conteúdo da Stack e salva em hw
+    .OUTS   hw              ; Imprime o conteúdo de hw na tela
+    .FREE   hw              ; Limpa a memória de hw
 
-           .ALC    A     11            ; Aloca 11 bytes em A
-           .DS     A     "Hello World" ; Escreve "Hello World" em A
-           .OUTS   A                   ; Imprime o conteúdo de A na tela
-           .FREE   A                   ; Limpa a memória de A
+.RET                        ; Retorna a função print_stack
 
-.RET                                   ; Declara o final da função HW e retorna para posição anterior da stack de programa
+
+.ALC    sm  11              ; Aloca 11 bytes em sm
+.DS     sm  "Hello World"   ; Escreve "Hello World" em sm
+.PUSH   sm                  ; Joga o conteúdo na Stack
+.FREE   sm                  ; Limpa a memória de sm
+.CALL print_stack           ; Chama a função print_stack
+
 ```
-
 
 
 # TODO

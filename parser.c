@@ -101,6 +101,13 @@ int parser_get_opcode_or_die(parser_T *p){
     if(strcmp(p->ct->content, "CALL") == 0){
         return CALL;
     }
+    if(strcmp(p->ct->content, "PUSH") == 0){
+        return PUSH;
+    }
+    if(strcmp(p->ct->content, "POP") == 0){
+        return POP;
+    }
+
 
     printf("Unknown instruction: %s\n", p->ct->content);
     exit(0);
@@ -196,6 +203,22 @@ void parser_get_args_or_die(parser_T *p, instruction_T *i){
             break;
 
         case CALL:
+
+            parser_verify_expected_or_die(p, ID);
+            i->carg0 = p->ct->content;
+            parser_advance(p);
+
+            break;
+
+        case PUSH:
+
+            parser_verify_expected_or_die(p, ID);
+            i->carg0 = p->ct->content;
+            parser_advance(p);
+
+            break;
+
+        case POP:
 
             parser_verify_expected_or_die(p, ID);
             i->carg0 = p->ct->content;

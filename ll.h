@@ -74,7 +74,9 @@ typedef struct INSTRUCTION_STRUCT{
       OUT_INT,
       FUNCTION,
       RETURN,
-      CALL
+      CALL,
+      PUSH,
+      POP
 
 
   }OPCODE;
@@ -128,6 +130,7 @@ typedef struct VIRTUALMACHINE_STRUCT{
 
     stack_T *pcStack;
     stack_T *isStack;
+    stack_T *generalStack;
 
     instruction_set_T *current_function;
 

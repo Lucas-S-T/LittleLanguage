@@ -153,6 +153,7 @@ vm_T *vm_create(parser_T *p){
 
     v->pcStack = vm_stack_create(1024);
     v->isStack = vm_stack_create(1024);
+    v->generalStack = vm_stack_create(1024);
 
     vm_load_instructions(v);
 
@@ -421,6 +422,31 @@ void __ret(vm_T *v, instruction_T *i){
 
 }
 
+void __push(vm_T *v, instruction_T *i){
+
+    ulong mid = vm_memory_find_index_by_id(v, i->carg0);
+
+    memory_T *m = v->memory[mid];
+
+    memory_T *cp = malloc(sizeof(struct MEMORY_STRUCT)+m->size);
+    memcpy(cp, m, sizeof(struct MEMORY_STRUCT)+m->size);
+
+    vm_stack_push(v->generalStack, cp);
+
+}
+
+
+void __pop(vm_T *v, instruction_T *i){
+
+    memory_T *m = vm_stack_pop(v->generalStack);
+
+    memory_T *al = vm_memory_allocate(v, i->carg0, m->size);
+    memcpy(al, m, sizeof(struct MEMORY_STRUCT)+m->size);
+    al->id = i->carg0;
+    free(m);
+
+
+}
 
 
 void vm_execute_instruction(vm_T *vm, instruction_T *i){
@@ -453,6 +479,12 @@ void vm_execute_instruction(vm_T *vm, instruction_T *i){
             break;
         case RETURN:
             __ret(vm, i);
+            break;
+        case PUSH:
+            __push(vm, i);
+            break;
+        case POP:
+            __pop(vm, i);
             break;
 
     }

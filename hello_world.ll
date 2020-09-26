@@ -1,12 +1,16 @@
 ; Exemplo de Hello World em Little Language
 
-.CALL   HW                             ; Chama a função HW salvando a posição atual na stack de programa
+.FUN print_stack:           ; Declara a função print_stack
 
-.FUN    HW:                            ; Declara o inicio da função HW
+    .POP    hw              ; Puxa o conteúdo da Stack e salva em hw
+    .OUTS   hw              ; Imprime o conteúdo de hw na tela
+    .FREE   hw              ; Limpa a memória de hw
 
-           .ALC    A     11            ; Aloca 11 bytes em A
-           .DS     A     "Hello World" ; Escreve "Hello World" em A
-           .OUTS   A                   ; Imprime o conteúdo de A na tela
-           .FREE   A                   ; Limpa a memória de A
+.RET                        ; Retorna a função print_stack
 
-.RET                                   ; Declara o final da função HW e retorna para posição anterior da stack de programa
+
+.ALC    sm  11              ; Aloca 11 bytes em sm
+.DS     sm  "Hello World"   ; Escreve "Hello World" em sm
+.PUSH   sm                  ; Joga o conteúdo na Stack
+.FREE   sm                  ; Limpa a memória de sm
+.CALL print_stack           ; Chama a função print_stack
