@@ -13,6 +13,7 @@ parser_T *parser_create(lexer_T *l){
     parser_T *p = malloc(sizeof(struct PARSER_STRUCT));
     p->l = l;
     p->ct = lexer_next_token(l);
+    p->function = (void*)0;
 
     return p;
 
@@ -88,6 +89,17 @@ int parser_get_opcode_or_die(parser_T *p){
 
     if(strcmp(p->ct->content, "OUTI") == 0){
         return OUT_INT;
+    }
+
+    if(strcmp(p->ct->content, "FUN") == 0){
+        return FUNCTION;
+    }
+
+    if(strcmp(p->ct->content, "RET") == 0){
+        return RETURN;
+    }
+    if(strcmp(p->ct->content, "CALL") == 0){
+        return CALL;
     }
 
     printf("Unknown instruction: %s\n", p->ct->content);
@@ -168,6 +180,29 @@ void parser_get_args_or_die(parser_T *p, instruction_T *i){
             parser_advance(p);
             break;
 
+        case FUNCTION:
+
+            parser_verify_expected_or_die(p, ID);
+            i->carg0 = p->ct->content;
+            i->funcID = p->ct->content;
+            parser_advance(p);
+            parser_verify_expected_or_die(p, COLON);
+            parser_advance(p);
+
+            break;
+
+        case RETURN:
+
+            break;
+
+        case CALL:
+
+            parser_verify_expected_or_die(p, ID);
+            i->carg0 = p->ct->content;
+            parser_advance(p);
+
+            break;
+
     }
 
 
@@ -207,6 +242,29 @@ instruction_T *parser_next_instruction(parser_T *p){
                 parser_advance(p);
                 parser_get_args_or_die(p, i);
                 p->state = START;
+
+                if(op == FUNCTION){
+
+                    if(p->function != (void*)0){
+                        printf("Invalid function declaration\n");
+                        exit(0);
+                    }
+
+                    p->function = i->funcID;
+                }
+
+                i->funcID = p->function;
+
+                if(op == RETURN){
+
+                    if(p->function == (void*)0){
+                        printf("RET instruction outside a FUN\n");
+                        exit(0);
+                    }
+
+                    p->function = (void*)0;
+                }
+
                 return i;
             }
             break;

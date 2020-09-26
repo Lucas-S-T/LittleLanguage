@@ -178,6 +178,14 @@ token_t *lexer_next_token(lexer_T *l){
 
             break;
 
+        case ':':
+
+            t = malloc(sizeof(struct TOKEN_STRUCT));
+            t->type = COLON;
+            lexer_advance(l);
+
+            break;
+
         case '"':
 
             t = malloc(sizeof(struct TOKEN_STRUCT));
@@ -201,8 +209,8 @@ token_t *lexer_next_token(lexer_T *l){
             t->content = malloc(8);
             t->size = 8;
             t->type = ID;
-            char cf[4] = " \n;\0";
-            lexer_get_until_chars(l, t, cf, 4);
+            char cf[5] = " \n;\0:";
+            lexer_get_until_chars(l, t, cf, 5);
             lexer_parse_number_or_ignore(t);
             break;
 

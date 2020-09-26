@@ -6,6 +6,136 @@
 #include <memory.h>
 #include "ll.h"
 
+stack_T *vm_stack_create(ulong size){
+
+    stack_T *s = malloc(sizeof(struct STACK_STRUCT)+sizeof(void*)*size);
+    s->top = 0;
+    s->size = size;
+    return s;
+
+}
+
+long vm_instruction_set_create(vm_T *vm, char *funcID){
+
+    instruction_set_T *is = malloc(sizeof(struct INSTRUCTION_SET_STRUCT));
+    is->sz = 0;
+    is->funcID = funcID;
+
+    vm->instruction_set[vm->isSize] = is;
+    vm->isSize++;
+
+    return vm->isSize-1;
+}
+
+instruction_set_T *vm_instruction_set_add(instruction_set_T *is, instruction_T *i){
+
+    instruction_set_T *isc;
+
+    isc = realloc(is, sizeof(instruction_set_T)+sizeof(void*)*(is->sz+1));
+    isc->instructions[isc->sz] = i;
+    isc->sz++;
+    return isc;
+
+}
+
+
+long vm_instruction_set_get_by_func_id_or_die(vm_T *v, char *funcID){
+
+    for(long i = 0; i<v->isSize; i++){
+
+        if(funcID == v->instruction_set[i]->funcID || ( funcID != (void*)0 && v->instruction_set[i]->funcID != (void*)0  && strcmp(funcID, v->instruction_set[i]->funcID) == 0)){
+            return i;
+        }
+
+    }
+
+    printf("Invalid function %s\n", funcID);
+    exit(0);
+
+}
+
+int vm_instruction_set_verify_func_id_exists(vm_T *v, char *funcID){
+
+    for(long i = 0; i<v->isSize; i++){
+
+        if(funcID == v->instruction_set[i]->funcID || ( funcID != (void*)0 && v->instruction_set[i]->funcID != (void*)0  && strcmp(funcID, v->instruction_set[i]->funcID) == 0)){
+            return 1;
+        }
+
+    }
+
+    return 0;
+
+}
+
+void vm_advance(vm_T *vm){
+    vm->ci = parser_next_instruction(vm->p);
+}
+
+void vm_load_instructions(vm_T *vm){
+
+    instruction_T *i = vm->ci;
+
+    instruction_set_T *cs;
+
+    long ind = vm_instruction_set_create(vm, (void*)0);
+    cs = vm->instruction_set[ind];
+
+    while(i != (void*)0){
+
+        if(vm->ci->OPCODE == FUNCTION){
+
+            if(vm_instruction_set_verify_func_id_exists(vm, vm->ci->funcID) == 0){
+
+                ind =  vm_instruction_set_create(vm, vm->ci->funcID);
+                cs = vm->instruction_set[ind];
+
+            }else{
+                printf("Duplicated function name declaration\n");
+            }
+
+            vm_advance(vm);
+            i = vm->ci;
+            continue;
+        }
+
+
+        vm->instruction_set[ind] = vm_instruction_set_add(cs, vm->ci);
+        cs = vm->instruction_set[ind];
+
+        if(vm->ci->OPCODE == RETURN){
+            ind = vm_instruction_set_get_by_func_id_or_die(vm, (void*)0);
+            cs = vm->instruction_set[ind];
+
+        }
+
+        vm_advance(vm);
+        i = vm->ci;
+    }
+
+
+    ind = vm_instruction_set_get_by_func_id_or_die(vm, (void*)0);
+
+    cs = vm->instruction_set[ind];
+
+    vm->current_function = cs;
+
+}
+
+instruction_T *vm_next_instruction(vm_T *vm){
+
+    instruction_set_T *cf = vm->current_function;
+
+    if(cf->sz == vm->pc){
+        return (void*)0;
+    }
+
+    vm->pc++;
+
+    return cf->instructions[vm->pc-1];
+
+}
+
 vm_T *vm_create(parser_T *p){
 
     vm_T *v = malloc(sizeof(struct VIRTUALMACHINE_STRUCT));
@@ -16,13 +146,47 @@ vm_T *vm_create(parser_T *p){
         v->memory[i] = (void*)0;
     }
 
+    v->pc = 0;
+
+    v->pcStack = vm_stack_create(1024);
+    v->isStack = vm_stack_create(1024);
+
+    vm_load_instructions(v);
+
     return v;
 
 }
 
-void vm_advance(vm_T *vm){
-    vm->ci = parser_next_instruction(vm->p);
+
+
+void vm_stack_push(stack_T *s, void *ptr){
+
+    if(s->size == s->top){
+        printf("Stack Overflow\n");
+        exit(0);
+    }
+
+    s->stack[s->top++] = ptr;
+
 }
+
+void *vm_stack_pop(stack_T *s){
+
+    if(s->top == 0){
+        printf("Stack Underflow\n");
+        exit(0);
+    }
+
+    return s->stack[--s->top];
+
+}
+
+void *vm_stack_top(stack_T *s){
+
+    return s->stack[s->top-1];
+
+}
+
 
 
 ulong vm_next_free_memory_index_or_die(vm_T *v){
@@ -159,7 +323,13 @@ void __out_string(vm_T *v, instruction_T *i){
 
     memory_T *m = v->memory[mi];
 
-    printf("%s\n", m->content);
+    for(int in = 0; in<m->size; in++){
+
+        putchar(m->content[in]);
+
+    }
+
+   putchar('\n');
 
 }
 
@@ -226,6 +396,30 @@ void __out_int(vm_T *v, instruction_T *i){
 
 }
 
+void __call(vm_T *v, instruction_T *i){
+
+    long nis = vm_instruction_set_get_by_func_id_or_die(v, i->carg0);
+
+    vm_stack_push(v->isStack, v->current_function);
+    vm_stack_push(v->pcStack, (void*)v->pc);
+
+
+    v->current_function = v->instruction_set[nis];
+    v->pc = 0;
+
+
+}
+
+void __ret(vm_T *v, instruction_T *i){
+
+    v->current_function = vm_stack_pop(v->isStack);
+    v->pc = (ulong) vm_stack_pop(v->pcStack);
+
+
+}
+
+
+
 void vm_execute_instruction(vm_T *vm, instruction_T *i){
 
     switch (i->OPCODE) {
@@ -251,6 +445,12 @@ void vm_execute_instruction(vm_T *vm, instruction_T *i){
         case OUT_INT:
             __out_int(vm, i);
             break;
+        case CALL:
+            __call(vm, i);
+            break;
+        case RETURN:
+            __ret(vm, i);
+            break;
 
     }
 
@@ -261,14 +461,14 @@ void vm_execute_instruction(vm_T *vm, instruction_T *i){
 int vm_run(vm_T *vm){
 
 
+    instruction_T *i = vm_next_instruction(vm);
 
-      while(vm->ci != (void*)0){
+    while(i != (void*)0){
 
-            vm_execute_instruction(vm, vm->ci);
+        vm_execute_instruction(vm, i);
 
-          vm_advance(vm);
-      }
-
+        i = vm_next_instruction(vm);
+    }
 
 
     return 0;

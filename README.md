@@ -35,20 +35,27 @@ Use o caracter .(ponto) antes de cada instrução.
 |Allocate Int |ALI | (1) ID | ALI HW | Aloca 4 bytes no endereço de memória de HW|
 |Load Int Const| LIC | (2) ID, INT | LIC HW 2 |Salva o valor inteiro constante 2 em HW |
 |Out Int | OUTI | (1) ID | OUTS HW | Imprime o conteúdo de HW na tela em decimal|
+|Function | FUN | (1) ID | FUN HW: | Declara uma função com o nome HW|
+|Return | RET | (0) | RET | Retorna a função|
+|Call Function | CALL | (1) ID | CALL HW | Chama a função HW|
 
 
 
 # Exemplo Hello World
 
 ```
-
 ; Exemplo de Hello World em Little Language
 
-.ALC    A     11            ; Aloca 11 bytes em A
-.DS     A     "Hello World" ; Escreve "Hello World" em A
-.OUTS   A                   ; Imprime o conteúdo de A na tela
-.FREE   A                   ; Limpa a memória de A
+.CALL   HW                             ; Chama a função HW salvando a posição atual na stack de programa
 
+.FUN    HW:                            ; Declara o inicio da função HW
+
+           .ALC    A     11            ; Aloca 11 bytes em A
+           .DS     A     "Hello World" ; Escreve "Hello World" em A
+           .OUTS   A                   ; Imprime o conteúdo de A na tela
+           .FREE   A                   ; Limpa a memória de A
+
+.RET                                   ; Declara o final da função HW e retorna para posição anterior da stack de programa +1 (Próxima instrução depois da .CALL)
 ```
 
 
@@ -59,9 +66,10 @@ Use o caracter .(ponto) antes de cada instrução.
 
 - [x] Melhorar conversão de char[] para int e outros tipos.
 - [ ] Outros tipos primitivos.
-- [ ] Suporte a Pilhas(Stacks, Geral, Calls etc).
-- [ ] Pre-carregamento das instruções.
-- [ ] Contador de programa (PC).
+- [x] Suporte a Pilhas(Stacks, Geral, Calls etc).
+- [x] Pre-carregamento das instruções.
+- [x] Contador de programa (PC).
+- [ ] Verificar se uma variável existe antes de efetuar uma operação.
 
 ## Instruções
 
@@ -69,8 +77,8 @@ Use o caracter .(ponto) antes de cada instrução.
 - [ ] Operações lógicas básicas.
 - [ ] Pulos condicionais.
 - [ ] Pulos relativos.
-- [ ] Chamadas de funções.
-- [ ] Retorno de funções.
+- [x] Chamadas de funções.
+- [x] Retorno de funções.
 
 
 ## Analisador Léxico
@@ -79,7 +87,7 @@ Use o caracter .(ponto) antes de cada instrução.
 
 ## Analisador Sintático
 
-- [ ] Suporte a declaração de funções.
+- [x] Suporte a declaração de funções.
 
 ## Geral
 

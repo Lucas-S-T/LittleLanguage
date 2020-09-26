@@ -31,7 +31,8 @@ typedef struct TOKEN_STRUCT{
         CHAR_SEQ,
         DOT,
         NUMERIC_INT,
-        NUMERIC_FLOAT
+        NUMERIC_FLOAT,
+        COLON
 
     }type;
 
@@ -54,6 +55,8 @@ typedef struct PARSER_STRUCT{
 
     }state;
 
+    char *function;
+
 
 }parser_T;
 
@@ -68,11 +71,15 @@ typedef struct INSTRUCTION_STRUCT{
       FREE,
       ALLOCATE_INT,
       LOAD_INT_CONST,
-      OUT_INT
+      OUT_INT,
+      FUNCTION,
+      RETURN,
+      CALL
 
 
   }OPCODE;
 
+  char *funcID;
 
   char *carg0;
   char *carg1;
@@ -95,15 +102,45 @@ typedef struct MEMORY_STRUCT{
 
 }memory_T;
 
+
+typedef struct STACK_STRUCT{
+
+    ulong size;
+    ulong top;
+    void *stack[];
+
+}stack_T;
+
+typedef struct INSTRUCTION_SET_STRUCT{
+
+    char *funcID;
+    ulong sz;
+    instruction_T *instructions[];
+
+
+}instruction_set_T;
+
 typedef struct VIRTUALMACHINE_STRUCT{
 
     parser_T *p;
     instruction_T *ci;
+    ulong pc;
+
+    stack_T *pcStack;
+    stack_T *isStack;
+
+    instruction_set_T *current_function;
+
+    ulong isSize;
+    instruction_set_T *instruction_set[1024];
 
     memory_T *memory[1024];
 
 
 }vm_T;
+
+
+
 
 
 
