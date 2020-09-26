@@ -77,7 +77,42 @@ int vm_memory_free(vm_T *v, ulong index){
 }
 
 
+int vm_ctoi(char *c){
 
+    union {
+
+        int i;
+        char c[4];
+
+    }t;
+
+    t.c[0] = c[0];
+    t.c[1] = c[1];
+    t.c[2] = c[2];
+    t.c[3] = c[3];
+
+    return t.i;
+
+}
+
+
+void vm_itoc(int i, char *c){
+
+    union {
+
+        int i;
+        char c[4];
+
+    }t;
+
+    t.i = i;
+
+    c[0] = t.c[0];
+    c[1] = t.c[1];
+    c[2] = t.c[2];
+    c[3] = t.c[3];
+
+}
 
 
 void __allocate(vm_T *v, instruction_T *i){
@@ -167,13 +202,7 @@ void __load_int_const(vm_T *v, instruction_T *i){
     memory_T *m = v->memory[mi];
 
 
-
-    m->content[0] =  (cont >>24 & 0xFF);
-    m->content[1] =  (cont >>16 & 0xFF);
-    m->content[2] =  (cont >>8 &0xFF);
-    m->content[3] =  (cont &0xFF);
-
-
+    vm_itoc(cont, m->content);
 
 }
 
@@ -191,20 +220,9 @@ void __out_int(vm_T *v, instruction_T *i){
 
     memory_T *m = v->memory[mi];
 
-    union {
+    int vl = vm_ctoi(m->content);
 
-        char b[4];
-        int i;
-
-    }tmp;
-
-
-    tmp.b[0] = m->content[3];
-    tmp.b[1] = m->content[2];
-    tmp.b[2] = m->content[1];
-    tmp.b[3] = m->content[0];
-
-    printf("%i\n", tmp.i);
+    printf("%i\n", vl);
 
 }
 

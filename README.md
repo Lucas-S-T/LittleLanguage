@@ -57,7 +57,7 @@ Use o caracter .(ponto) antes de cada instrução.
 
 ## Maquina Virtual
 
-- [ ] Melhorar conversão de char[] para int e outros tipos.
+- [x] Melhorar conversão de char[] para int e outros tipos.
 - [ ] Outros tipos primitivos.
 - [ ] Suporte a Pilhas(Stacks, Geral, Calls etc).
 - [ ] Pre-carregamento das instruções.
