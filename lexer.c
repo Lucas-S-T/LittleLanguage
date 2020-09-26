@@ -25,6 +25,7 @@ lexer_T *lexer_create(char *content, ulong size){
 
 void lexer_advance(lexer_T *l){
 
+
     if(l->size > l->pos) {
         l->c = l->content[++l->pos];
     } else {
@@ -145,7 +146,18 @@ token_t *lexer_next_token(lexer_T *l){
 
     while (l->state == COMMENT){
 
-        if(*c == '\n'){
+        static char ce[2] = "\n\0";
+
+        int st = 0;
+
+        for(int i = 0; i<2; i++){
+            if(*c == ce[i]){
+                st = 1;
+                break;
+            }
+        }
+
+        if(st){
             l->state = NORMAL;
             lexer_advance(l);
             break;
@@ -200,7 +212,6 @@ token_t *lexer_next_token(lexer_T *l){
             break;
 
         case '\0':
-
             break;
 
         default:

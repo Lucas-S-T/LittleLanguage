@@ -103,6 +103,8 @@ void vm_load_instructions(vm_T *vm){
         vm->instruction_set[ind] = vm_instruction_set_add(cs, vm->ci);
         cs = vm->instruction_set[ind];
 
+
+
         if(vm->ci->OPCODE == RETURN){
             ind = vm_instruction_set_get_by_func_id_or_die(vm, (void*)0);
             cs = vm->instruction_set[ind];
@@ -112,6 +114,7 @@ void vm_load_instructions(vm_T *vm){
         vm_advance(vm);
         i = vm->ci;
     }
+
 
 
     ind = vm_instruction_set_get_by_func_id_or_die(vm, (void*)0);
