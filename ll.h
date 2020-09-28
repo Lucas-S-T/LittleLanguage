@@ -155,4 +155,55 @@ extern instruction_T *parser_next_instruction(parser_T *p);
 extern vm_T *vm_create(parser_T *p);
 extern int vm_run(vm_T *vm);
 
+
+
+//      VM
+
+//General
+extern long vm_instruction_set_get_by_func_id_or_die(vm_T *v, char *funcID);
+extern void vm_stack_push(stack_T *s, void *ptr);
+extern void *vm_stack_pop(stack_T *s);
+extern void *vm_stack_top(stack_T *s);
+
+
+//Memory
+extern memory_T *vm_memory_allocate_or_die(vm_T *v, char *id, ulong sz);
+extern ulong vm_memory_find_index_by_id_or_die(vm_T *v, char *id);
+extern ulong vm_next_free_memory_index_or_die(vm_T *v);
+extern int vm_memory_free(vm_T *v, ulong index);
+extern int vm_ctoi(char *c);
+extern void vm_itoc(int i, char *c);
+extern int vm_memory_is_allocated_by_id(vm_T *v, char *id);
+
+
+
+
+
+//      Instructions
+
+//Memory
+extern void __allocate(vm_T *v, instruction_T *i);
+extern void __free(vm_T *v, instruction_T *i);
+extern void __allocate_int(vm_T *v, instruction_T *i);
+
+//Output
+extern void __out_string(vm_T *v, instruction_T *i);
+extern void __out_int(vm_T *v, instruction_T *i);
+
+//Functions
+extern void __call(vm_T *v, instruction_T *i);
+extern void __ret(vm_T *v, instruction_T *i);
+
+//Stack
+extern void __push(vm_T *v, instruction_T *i);
+extern void __pop(vm_T *v, instruction_T *i);
+
+//Variables
+extern void __dump_string(vm_T *v, instruction_T *i);
+extern void __load_int_const(vm_T *v, instruction_T *i);
+
+
+
+
+
 #endif //LITTLELANGUAGE_LL_H

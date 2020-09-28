@@ -128,7 +128,7 @@ Use o caracter .(ponto) antes de cada instrução.
 - [x] Suporte a Pilhas(Stacks, Geral, Calls etc).
 - [x] Pre-carregamento das instruções.
 - [x] Contador de programa (PC).
-- [ ] Verificar se uma variável existe antes de efetuar uma operação.
+- [x] Verificar se uma variável existe antes de efetuar uma operação.
 - [ ] Escopo de variáveis em funções.
 
 ## Instruções
