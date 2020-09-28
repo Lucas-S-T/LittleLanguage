@@ -58,6 +58,11 @@ momento, quando você chama uma nova função, o conjunto de instruções atual 
 principal é alterado para a função anteriormente chamada. Dado o limite da pilha, a quantidade máxima de
 profundidade de uma função é 1024 chamadas.
 
+**Function ID Stack**: Sempre que uma nova funcão é chamada, um novo Function ID aleatório é gerado, e o
+da funcão anterior é salvo nessa Stack para ser recuperado quando a funcão retornar. Isso permite um
+controle melhor da memória, fazendo a VM ser capaz de limpar as variáveis utilizadas dentro de uma funcão
+quando a mesma retornar e permitir um escopo de variáveis.
+
 **Program Counter Stack**: Sempre que o conjunto de instruções é alterado, é necessário salvar o valor
 atual do contador de programa para ser possível continuar a ordem de execução do conjunto  
 anterior após o retorno de uma função.
@@ -66,6 +71,7 @@ anterior após o retorno de uma função.
 PUSH em uma variável o conteúdo dela é copiado para Stack, seu conteúdo não é perdido, ao dar POP a uma
 outra variável ela é automaticamente alocada com a mesmo tamanho da Stack, em seguida, ela recebe o conteúdo
 previamente colocado na pilha.
+
 
 ### Contador de Programa 
 
@@ -129,7 +135,8 @@ Use o caracter .(ponto) antes de cada instrução.
 - [x] Pre-carregamento das instruções.
 - [x] Contador de programa (PC).
 - [x] Verificar se uma variável existe antes de efetuar uma operação.
-- [ ] Escopo de variáveis em funções.
+- [x] Escopo de variáveis em funções.
+- [x] Limpar a memória das variáveis ao retornar uma funcão.
 
 ## Instruções
 

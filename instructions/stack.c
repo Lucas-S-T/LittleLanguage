@@ -27,6 +27,7 @@ void __pop(vm_T *v, instruction_T *i){
     memory_T *al = vm_memory_allocate_or_die(v, i->carg0, m->size);
     memcpy(al, m, sizeof(struct MEMORY_STRUCT)+m->size);
     al->id = i->carg0;
+    al->fid = v->current_function_id;
     free(m);
 
 

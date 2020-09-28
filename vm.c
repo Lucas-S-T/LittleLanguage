@@ -121,6 +121,8 @@ void vm_load_instructions(vm_T *vm){
 
     cs = vm->instruction_set[ind];
 
+    vm->current_function_id = random();
+
     vm->current_function = cs;
 
 }
@@ -153,7 +155,9 @@ vm_T *vm_create(parser_T *p){
 
     v->pcStack = vm_stack_create(1024);
     v->isStack = vm_stack_create(1024);
+    v->fidStack = vm_stack_create(1024);
     v->generalStack = vm_stack_create(1024);
+
 
     vm_load_instructions(v);
 
@@ -206,6 +210,16 @@ ulong vm_next_free_memory_index_or_die(vm_T *v){
 
 }
 
+void vm_memory_free_current_fid(vm_T *v){
+
+    for(int i = 0; i<sizeof(v->memory)/sizeof(void*); i++){
+        if(v->memory[i] != (void*)0 && v->memory[i]->used == 1 && v->memory[i]->fid == v->current_function_id){
+            vm_memory_free(v, i);
+        }
+    }
+
+}
+
 memory_T *vm_memory_allocate_or_die(vm_T *v, char *id, ulong sz){
 
     if(vm_memory_is_allocated_by_id(v, id)){
@@ -217,6 +231,7 @@ memory_T *vm_memory_allocate_or_die(vm_T *v, char *id, ulong sz){
     m->id = id;
     m->size = sz;
     m->used = 1;
+    m->fid = v->current_function_id;
 
     v->memory[vm_next_free_memory_index_or_die(v)] = m;
 
@@ -226,9 +241,11 @@ memory_T *vm_memory_allocate_or_die(vm_T *v, char *id, ulong sz){
 
 ulong vm_memory_find_index_by_id_or_die(vm_T *v, char *id){
 
+
     for(int i = 0; i<sizeof(v->memory)/sizeof(void*); i++){
 
-        if(v->memory[i] != (void*)0 && strcmp(v->memory[i]->id, id) == 0){
+
+        if(v->memory[i] != (void*)0 && strcmp(v->memory[i]->id, id) == 0 && v->memory[i]->fid == v->current_function_id){
             return i;
         }
 
@@ -244,7 +261,7 @@ int vm_memory_is_allocated_by_id(vm_T *v, char *id){
 
     for(int i = 0; i<sizeof(v->memory)/sizeof(void*); i++){
 
-        if(v->memory[i] != (void*)0 && strcmp(v->memory[i]->id, id) == 0){
+        if(v->memory[i] != (void*)0 && strcmp(v->memory[i]->id, id) == 0 && v->memory[i]->fid == v->current_function_id){
             return 1;
         }
 

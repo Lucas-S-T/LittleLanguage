@@ -97,6 +97,7 @@ typedef struct MEMORY_STRUCT{
     int used;
     char *id;
     ulong size;
+    ulong fid;
 
     char content[];
 
@@ -130,9 +131,11 @@ typedef struct VIRTUALMACHINE_STRUCT{
 
     stack_T *pcStack;
     stack_T *isStack;
+    stack_T *fidStack;
     stack_T *generalStack;
 
     instruction_set_T *current_function;
+    ulong current_function_id;
 
     ulong isSize;
     instruction_set_T *instruction_set[1024];
@@ -174,7 +177,7 @@ extern int vm_memory_free(vm_T *v, ulong index);
 extern int vm_ctoi(char *c);
 extern void vm_itoc(int i, char *c);
 extern int vm_memory_is_allocated_by_id(vm_T *v, char *id);
-
+extern void vm_memory_free_current_fid(vm_T *v);
 
 
 
