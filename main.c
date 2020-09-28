@@ -31,9 +31,10 @@ int main(int args, char **argv) {
 
     code[sz] = '\0';
 
-
-    lexer_T *l = lexer_create(code, sz);
+    lexer_T *l = lexer_create(code, sz, argv[0]);
     parser_T *p = parser_create(l);
+
+
     vm_T *vm = vm_create(p);
     return vm_run(vm);
 

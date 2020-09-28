@@ -68,11 +68,26 @@ int vm_instruction_set_verify_func_id_exists(vm_T *v, char *funcID){
 
 }
 
-void vm_advance(vm_T *vm){
-    vm->ci = parser_next_instruction(vm->p);
+void vm_advance(vm_T *vm, parser_T *p){
+    vm->ci = parser_next_instruction(p);
 }
 
-void vm_load_instructions(vm_T *vm){
+void vm_verify_include_or_die(vm_T *vm, char *path){
+
+    for(ulong i = 0; i<vm->files_sz; i++){
+        if(strcmp(path, vm->files[i]) == 0){
+            printf("Duplicated include %s\n", vm->files[i]);
+            exit(0);
+        }
+    }
+
+    vm->files_sz++;
+    vm->files = realloc(vm->files, sizeof(void*)*vm->files_sz);
+    vm->files[vm->files_sz-1] = path;
+
+}
+
+void vm_load_instructions(vm_T *vm, parser_T *p){
 
     instruction_T *i = vm->ci;
 
@@ -92,27 +107,61 @@ void vm_load_instructions(vm_T *vm){
 
             }else{
                 printf("Duplicated function name declaration\n");
+                exit(0);
             }
 
-            vm_advance(vm);
+            vm_advance(vm, p);
             i = vm->ci;
             continue;
         }
 
-
-        vm->instruction_set[ind] = vm_instruction_set_add(cs, vm->ci);
-        cs = vm->instruction_set[ind];
-
-
-
-        if(vm->ci->OPCODE == RETURN){
-            ind = vm_instruction_set_get_by_func_id_or_die(vm, (void*)0);
+        if(vm->ci->OPCODE != INCLUDE) {
+            vm->instruction_set[ind] = vm_instruction_set_add(cs, vm->ci);
             cs = vm->instruction_set[ind];
+
+            if(vm->ci->OPCODE == RETURN){
+                ind = vm_instruction_set_get_by_func_id_or_die(vm, (void*)0);
+                cs = vm->instruction_set[ind];
+
+            }
+
+
+        }else{
+
+            FILE *f = fopen(vm->ci->carg0, "rb");
+
+            if(f == (void*)0){
+                printf("Include file not found\n");
+                exit(0);
+            }
+
+            fseek(f, 0, SEEK_END);
+
+            ulong sz = ftello(f);
+
+            char *code = calloc(1, sz+1);
+
+            fseek(f, 0, SEEK_SET);
+
+            fread(code, sz, 1, f);
+
+            code[sz] = '\0';
+
+            vm_verify_include_or_die(vm, vm->ci->carg0);
+
+            lexer_T *l = lexer_create(code, sz, vm->ci->carg0);
+            parser_T *np = parser_create(l);
+
+            vm_advance(vm, np);
+            vm_load_instructions(vm, np);
 
         }
 
-        vm_advance(vm);
+
+        vm_advance(vm, p);
         i = vm->ci;
+
+
     }
 
 
@@ -157,9 +206,11 @@ vm_T *vm_create(parser_T *p){
     v->isStack = vm_stack_create(1024);
     v->fidStack = vm_stack_create(1024);
     v->generalStack = vm_stack_create(1024);
+    v->files_sz = 0;
 
+    vm_verify_include_or_die(v, p->l->path);
 
-    vm_load_instructions(v);
+    vm_load_instructions(v, p);
 
     return v;
 

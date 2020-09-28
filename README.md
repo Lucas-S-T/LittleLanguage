@@ -99,6 +99,7 @@ Use o caracter .(ponto) antes de cada instrução.
 |Call Function | CALL | (1) ID | CALL HW | Chama a função HW|
 |Push Stack | PUSH | (1) ID | PUSH HW | Salva o conteúdo de HW na Stack|
 |Pop Stack | POP | (1) ID | POP HW | Aloca e salva o conteúdo da Stack em HW|
+|Include | INCLUDE | (1) STR | .INCLUDE "hw.ll" | Inclui o arquivo externo "hw.ll"|
 
 
 
@@ -155,7 +156,7 @@ Use o caracter .(ponto) antes de cada instrução.
 ## Analisador Sintático
 
 - [x] Suporte a declaração de funções.
-- [ ] Suporte para incluir múltiplos arquivos.
+- [x] Suporte para incluir múltiplos arquivos.
 
 ## Geral
 

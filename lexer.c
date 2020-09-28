@@ -8,7 +8,7 @@
 #include "ll.h"
 
 
-lexer_T *lexer_create(char *content, ulong size){
+lexer_T *lexer_create(char *content, ulong size, char *path){
 
     lexer_T *l = malloc(sizeof(struct LEXER_STRUCT));
 
@@ -17,6 +17,7 @@ lexer_T *lexer_create(char *content, ulong size){
     l->pos = 0;
     l->c = l->content[l->pos];
     l->state = NORMAL;
+    l->path = path;
 
     return l;
 

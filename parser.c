@@ -107,8 +107,9 @@ int parser_get_opcode_or_die(parser_T *p){
     if(strcmp(p->ct->content, "POP") == 0){
         return POP;
     }
-
-
+    if(strcmp(p->ct->content, "INCLUDE") == 0){
+        return INCLUDE;
+    }
     printf("Unknown instruction: %s\n", p->ct->content);
     exit(0);
 
@@ -221,6 +222,13 @@ void parser_get_args_or_die(parser_T *p, instruction_T *i){
         case POP:
 
             parser_verify_expected_or_die(p, ID);
+            i->carg0 = p->ct->content;
+            parser_advance(p);
+
+            break;
+        case INCLUDE:
+
+            parser_verify_expected_or_die(p, CHAR_SEQ);
             i->carg0 = p->ct->content;
             parser_advance(p);
 

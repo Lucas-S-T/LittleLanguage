@@ -9,6 +9,7 @@
 
 typedef struct LEXER_STRUCT{
 
+    char *path;
     char *content;
     ulong size;
     ulong pos;
@@ -76,7 +77,8 @@ typedef struct INSTRUCTION_STRUCT{
       RETURN,
       CALL,
       PUSH,
-      POP
+      POP,
+      INCLUDE
 
 
   }OPCODE;
@@ -125,6 +127,9 @@ typedef struct INSTRUCTION_SET_STRUCT{
 
 typedef struct VIRTUALMACHINE_STRUCT{
 
+    ulong files_sz;
+    char **files;
+
     parser_T *p;
     instruction_T *ci;
     ulong pc;
@@ -151,7 +156,7 @@ typedef struct VIRTUALMACHINE_STRUCT{
 
 
 
-extern lexer_T *lexer_create(char *content, ulong size);
+extern lexer_T *lexer_create(char *content, ulong size, char *path);
 extern token_t *lexer_next_token(lexer_T *l);
 extern parser_T *parser_create(lexer_T *l);
 extern instruction_T *parser_next_instruction(parser_T *p);
