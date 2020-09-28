@@ -96,13 +96,13 @@ typedef struct INSTRUCTION_STRUCT{
 
 typedef struct MEMORY_STRUCT{
 
-    int used;
-    char *id;
+
     ulong size;
     ulong fid;
+    int used;
+    char *id;
 
     char content[];
-
 
 
 }memory_T;

@@ -33,6 +33,7 @@ Testado apenas em um ambiente Arch Linux com 64 bits.
  - [Wiki](https://github.com/Lucas-S-T/LittleLanguage/wiki/)
  - [Máquina Virtual](https://github.com/Lucas-S-T/LittleLanguage/wiki/M%C3%A1quina-Virtual)
  - [Instruções](https://github.com/Lucas-S-T/LittleLanguage/wiki/Instru%C3%A7%C3%B5es)
+ - [Memória](https://github.com/Lucas-S-T/LittleLanguage/wiki/Mem%C3%B3ria)
 
 
 # Exemplo Hello World
@@ -80,6 +81,9 @@ Testado apenas em um ambiente Arch Linux com 64 bits.
 - [ ] Pulos relativos.
 - [x] Chamadas de funções.
 - [x] Retorno de funções.
+- [ ] Tamanho de variáveis.
+- [ ] Cópia de variáveis.
+- [ ] Manipulação de bytes em variáveis (Index, get, set)
 
 
 ## Analisador Léxico
@@ -90,11 +94,16 @@ Testado apenas em um ambiente Arch Linux com 64 bits.
 
 - [x] Suporte a declaração de funções.
 - [x] Suporte para incluir múltiplos arquivos.
+- [ ] Suporte a definição de índices.
 
 ## Geral
 
+- [ ] Suporte a Flags
 - [ ] Melhorar mensagens de erro do Lexador e Analisador.
 - [ ] Completude de Turing.
  
+
+## VM Flags
+- [ ] Clean Allocation (Allocate variables bytes at zero)
  
  
