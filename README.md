@@ -14,7 +14,7 @@ tal sistema é aquele que pode simular uma máquina de Turing universal.
 
 Necessário CMake 3.17 +
 
-Testado apenas em um ambiente Arch Linux.
+Testado apenas em um ambiente Arch Linux com 64 bits.
 
 ```
 
@@ -70,6 +70,7 @@ Testado apenas em um ambiente Arch Linux.
 - [x] Verificar se uma variável existe antes de efetuar uma operação.
 - [x] Escopo de variáveis em funções.
 - [x] Limpar a memória das variáveis ao retornar uma funcão.
+- [ ] Tamanho dinâmico da stack e memória (Limite atual de 1024)
 
 ## Instruções
 
