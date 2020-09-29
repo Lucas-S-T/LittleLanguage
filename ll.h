@@ -83,7 +83,8 @@ typedef struct INSTRUCTION_STRUCT{
       ISUB,
       IMUL,
       IDIV,
-      SIZE
+      SIZE,
+      RJMP
 
 
   }OPCODE;
@@ -221,6 +222,9 @@ extern void __iadd(vm_T *v, instruction_T *i);
 extern void __isub(vm_T *v, instruction_T *i);
 extern void __imul(vm_T *v, instruction_T *i);
 extern void __idiv(vm_T *v, instruction_T *i);
+
+//Jump
+extern void __rjmp(vm_T *v, instruction_T *i);
 
 
 

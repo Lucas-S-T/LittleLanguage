@@ -125,6 +125,9 @@ int parser_get_opcode_or_die(parser_T *p){
     if(strcmp(p->ct->content, "SIZE") == 0){
         return SIZE;
     }
+    if(strcmp(p->ct->content, "RJMP") == 0){
+        return RJMP;
+    }
 
 
     printf("Unknown instruction: %s\n", p->ct->content);
@@ -295,11 +298,18 @@ void parser_get_args_or_die(parser_T *p, instruction_T *i){
 
             break;
 
-
         case SIZE:
 
             parser_verify_expected_or_die(p, ID);
             i->carg0 = p->ct->content;
+            parser_advance(p);
+
+            break;
+
+        case RJMP:
+
+            parser_verify_expected_or_die(p, NUMERIC_INT);
+            i->larg0 = parser_get_as_integer(p);
             parser_advance(p);
 
             break;
