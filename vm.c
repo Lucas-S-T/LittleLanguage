@@ -382,6 +382,9 @@ void vm_execute_instruction(vm_T *vm, instruction_T *i){
         case IDIV:
             __idiv(vm, i);
             break;
+        case SIZE:
+            __size(vm, i);
+            break;
 
     }
 

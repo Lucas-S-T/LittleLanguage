@@ -82,7 +82,8 @@ typedef struct INSTRUCTION_STRUCT{
       IADD,
       ISUB,
       IMUL,
-      IDIV
+      IDIV,
+      SIZE
 
 
   }OPCODE;
@@ -213,6 +214,7 @@ extern void __pop(vm_T *v, instruction_T *i);
 //Variables
 extern void __dump_string(vm_T *v, instruction_T *i);
 extern void __load_int_const(vm_T *v, instruction_T *i);
+extern void __size(vm_T *v, instruction_T *i);                //Change to Long
 
 //Arithmetic
 extern void __iadd(vm_T *v, instruction_T *i);

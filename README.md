@@ -75,13 +75,13 @@ Testado apenas em um ambiente Arch Linux com 64 bits.
 
 ## Instruções
 
-- [ ] Operações aritméticas básicas.
+- [x] Operações aritméticas básicas.
 - [ ] Operações lógicas básicas.
 - [ ] Pulos condicionais.
 - [ ] Pulos relativos.
 - [x] Chamadas de funções.
 - [x] Retorno de funções.
-- [ ] Tamanho de variáveis.
+- [x] Tamanho de variáveis.
 - [ ] Cópia de variáveis.
 - [ ] Manipulação de bytes em variáveis (Index, get, set)
 

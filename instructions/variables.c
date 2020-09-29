@@ -39,3 +39,22 @@ void __load_int_const(vm_T *v, instruction_T *i){
     vm_itoc(cont, m->content);
 
 }
+
+void __size(vm_T *v, instruction_T *i){
+
+
+    char *id = i->carg0;
+
+    ulong mi = vm_memory_find_index_by_id_or_die(v, id);
+
+    memory_T *m = v->memory[mi];
+
+    memory_T *mv = malloc(sizeof(struct MEMORY_STRUCT)+4);
+    mv->size = 4;
+    mv->used = 1;
+    vm_itoc(m->size, mv->content);
+
+
+    vm_stack_push(v->generalStack, mv);
+
+}

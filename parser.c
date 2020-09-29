@@ -122,6 +122,10 @@ int parser_get_opcode_or_die(parser_T *p){
     if(strcmp(p->ct->content, "IDIV") == 0){
         return IDIV;
     }
+    if(strcmp(p->ct->content, "SIZE") == 0){
+        return SIZE;
+    }
+
 
     printf("Unknown instruction: %s\n", p->ct->content);
     exit(0);
@@ -287,6 +291,15 @@ void parser_get_args_or_die(parser_T *p, instruction_T *i){
             parser_advance(p);
             parser_verify_expected_or_die(p, ID);
             i->carg1 = p->ct->content;
+            parser_advance(p);
+
+            break;
+
+
+        case SIZE:
+
+            parser_verify_expected_or_die(p, ID);
+            i->carg0 = p->ct->content;
             parser_advance(p);
 
             break;
