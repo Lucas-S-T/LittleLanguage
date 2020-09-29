@@ -110,6 +110,19 @@ int parser_get_opcode_or_die(parser_T *p){
     if(strcmp(p->ct->content, "INCLUDE") == 0){
         return INCLUDE;
     }
+    if(strcmp(p->ct->content, "IADD") == 0){
+        return IADD;
+    }
+    if(strcmp(p->ct->content, "ISUB") == 0){
+        return ISUB;
+    }
+    if(strcmp(p->ct->content, "IMUL") == 0){
+        return IMUL;
+    }
+    if(strcmp(p->ct->content, "IDIV") == 0){
+        return IDIV;
+    }
+
     printf("Unknown instruction: %s\n", p->ct->content);
     exit(0);
 
@@ -230,6 +243,50 @@ void parser_get_args_or_die(parser_T *p, instruction_T *i){
 
             parser_verify_expected_or_die(p, CHAR_SEQ);
             i->carg0 = p->ct->content;
+            parser_advance(p);
+
+            break;
+
+        case IADD:
+
+            parser_verify_expected_or_die(p, ID);
+            i->carg0 = p->ct->content;
+            parser_advance(p);
+            parser_verify_expected_or_die(p, ID);
+            i->carg1 = p->ct->content;
+            parser_advance(p);
+
+            break;
+
+        case ISUB:
+
+            parser_verify_expected_or_die(p, ID);
+            i->carg0 = p->ct->content;
+            parser_advance(p);
+            parser_verify_expected_or_die(p, ID);
+            i->carg1 = p->ct->content;
+            parser_advance(p);
+
+            break;
+
+        case IMUL:
+
+            parser_verify_expected_or_die(p, ID);
+            i->carg0 = p->ct->content;
+            parser_advance(p);
+            parser_verify_expected_or_die(p, ID);
+            i->carg1 = p->ct->content;
+            parser_advance(p);
+
+            break;
+
+        case IDIV:
+
+            parser_verify_expected_or_die(p, ID);
+            i->carg0 = p->ct->content;
+            parser_advance(p);
+            parser_verify_expected_or_die(p, ID);
+            i->carg1 = p->ct->content;
             parser_advance(p);
 
             break;

@@ -78,7 +78,11 @@ typedef struct INSTRUCTION_STRUCT{
       CALL,
       PUSH,
       POP,
-      INCLUDE
+      INCLUDE,
+      IADD,
+      ISUB,
+      IMUL,
+      IDIV
 
 
   }OPCODE;
@@ -210,6 +214,11 @@ extern void __pop(vm_T *v, instruction_T *i);
 extern void __dump_string(vm_T *v, instruction_T *i);
 extern void __load_int_const(vm_T *v, instruction_T *i);
 
+//Arithmetic
+extern void __iadd(vm_T *v, instruction_T *i);
+extern void __isub(vm_T *v, instruction_T *i);
+extern void __imul(vm_T *v, instruction_T *i);
+extern void __idiv(vm_T *v, instruction_T *i);
 
 
 

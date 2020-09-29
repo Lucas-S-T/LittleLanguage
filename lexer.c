@@ -94,7 +94,7 @@ void lexer_parse_number_or_ignore(token_t *t){
     int valid = 1;
 
 
-    static char n[10] = "1234567890";
+    static char n[11] = "1234567890-";
 
     for(int i = 0; i<strlen(t->content); i++){
 
@@ -110,7 +110,7 @@ void lexer_parse_number_or_ignore(token_t *t){
         }
 
         int con = 0;
-        for(int j = 0; j<10; j++){
+        for(int j = 0; j<11; j++){
 
             if(c == n[j]){
                 valid = 1;

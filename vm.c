@@ -370,6 +370,18 @@ void vm_execute_instruction(vm_T *vm, instruction_T *i){
         case POP:
             __pop(vm, i);
             break;
+        case IADD:
+            __iadd(vm, i);
+            break;
+        case ISUB:
+            __isub(vm, i);
+            break;
+        case IMUL:
+            __imul(vm, i);
+            break;
+        case IDIV:
+            __idiv(vm, i);
+            break;
 
     }
 
