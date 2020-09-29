@@ -84,7 +84,8 @@ typedef struct INSTRUCTION_STRUCT{
       IMUL,
       IDIV,
       SIZE,
-      RJMP
+      RJMP,
+      CJMP
 
 
   }OPCODE;
@@ -225,6 +226,7 @@ extern void __idiv(vm_T *v, instruction_T *i);
 
 //Jump
 extern void __rjmp(vm_T *v, instruction_T *i);
+extern void __cjmp(vm_T *v, instruction_T *i);                  // Memory leak
 
 
 

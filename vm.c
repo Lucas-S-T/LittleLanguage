@@ -388,6 +388,9 @@ void vm_execute_instruction(vm_T *vm, instruction_T *i){
         case RJMP:
             __rjmp(vm, i);
             break;
+        case CJMP:
+            __cjmp(vm, i);
+            break;
 
     }
 

@@ -77,8 +77,8 @@ Testado apenas em um ambiente Arch Linux com 64 bits.
 
 - [x] Operações aritméticas básicas.
 - [ ] Operações lógicas básicas.
-- [ ] Pulos condicionais.
-- [ ] Pulos relativos.
+- [x] Pulos condicionais.
+- [x] Pulos relativos.
 - [x] Chamadas de funções.
 - [x] Retorno de funções.
 - [x] Tamanho de variáveis.
@@ -101,6 +101,7 @@ Testado apenas em um ambiente Arch Linux com 64 bits.
 - [ ] Suporte a Flags
 - [ ] Melhorar mensagens de erro do Lexador e Analisador.
 - [ ] Completude de Turing.
+- [ ] Vazamento de memória em Stack Pop
  
 
 ## VM Flags
